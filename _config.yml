@@ -1,12 +1,12 @@
-title: ConcernedCarrot's Game Notes
-description: Games I play, think about, and overanalyze
-lang: ja
-timezone: Asia/Tokyo
+title: "心配する人参"
+description: 
+lang: 
+timezone: 
 theme: minima
 author:
   name: ConcernedCarrot
-  email: contact@example.com
-  github_username: ConcernedCarrot
+  email: 
+  github_username: 
 minima:
   skin: auto
 show_excerpts: true
