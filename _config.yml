@@ -19,12 +19,13 @@ plugins:
   - jekyll-paginate
 
 giscus:
-  repo: 
+  repo: "ConcernedCarrot/ConcernedCarrot.github.io"
   repo_id: "R_kgDOQES6jg"
-  category: "General"
+  category: "Announcements"
   category_id: "DIC_kwDOQES6js4Cwwfh"
-  mapping: "pathname"                                  
+  mapping: "pathname"
   reactions_enabled: "1"
   emit_metadata: "0"
   input_position: "bottom"
   theme: "preferred_color_scheme"
+  lang: "en" 
