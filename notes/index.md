@@ -5,7 +5,7 @@ title: Notes
 permalink: /notes/
 ---
 
-ITやセキュリティ分野の学習メモ置き場。まだ少しずつ追加予定です。
+ITやセキュリティ分野の学習メモ
 
 ### 例
 - Linux メモ
