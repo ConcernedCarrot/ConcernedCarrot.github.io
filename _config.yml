@@ -13,7 +13,7 @@ baseurl: ""
 
 theme: minima
 minima:
-　date_format: "%Y-%m-%d"
+  date_format: "%Y-%m-%d"
   skin: auto
 show_excerpts: true
 paginate: 10
@@ -29,7 +29,7 @@ header_pages:
 
 markdown: kramdown
 
-twitter_username: @ConcernedCarro
+twitter_username: "@ConcernedCarro"
 
 giscus:
   repo: "ConcernedCarrot/ConcernedCarrot.github.io"
