@@ -2,26 +2,34 @@ title: "Concerned;Carrot"
 description:
 lang: 
 timezone:
-theme: minima
 
 author:
   name: "ConcernedCarrot"
   email:
   github_username:
 
-show_excerpts: true
-paginate: 10
 paginate_path: "/page:num/"
 baseurl: ""
 
+theme: minima
 minima:
+　date_format: "%Y-%m-%d"
   skin: auto
+show_excerpts: true
+paginate: 10
 
 plugins:
   - jekyll-paginate
 
 header_pages:
-  - index.md            
+  - index.md
+  - blog/index.md
+  - notes/index.md
+  - about.md     
+
+markdown: kramdown
+
+twitter_username: @ConcernedCarro
 
 giscus:
   repo: "ConcernedCarrot/ConcernedCarrot.github.io"
