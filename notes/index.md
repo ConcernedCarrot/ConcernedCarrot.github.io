@@ -4,10 +4,10 @@ title: Notes
 permalink: /notes/
 ---
 
-ITやセキュリティ分野の学習メモ
+ITやセキュリティ分野のメモ
 
 ### 例
-- Linux メモ
+- Linuxメモ
 - セキュリティ
 - ネットワーク
-- Git/GitHub メモ
+- Git/GitHubメモ
