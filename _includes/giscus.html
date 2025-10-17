@@ -1,24 +1,22 @@
-{% comment %}
-  _includes/giscus.html
-{% endcomment %}
 {% if site.giscus and site.giscus.repo and page.comments != false %}
 <section id="comments" class="giscus-wrapper">
-  <h2> comments</h2>
+  <h2>comments</h2>
   <div id="giscus_thread"></div>
- <script src="https://giscus.app/client.js"
-        data-repo="ConcernedCarrot/ConcernedCarrot.github.io"
-        data-repo-id="R_kgDOQES6jg"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOQES6js4Cwwfh"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        crossorigin="anonymous"
-        async>
-</script>
-  <noscript>JavaScript</noscript>
+  <script src="https://giscus.app/client.js"
+          data-repo="{{ site.giscus.repo }}"
+          data-repo-id="{{ site.giscus.repo_id }}"
+          data-category="{{ site.giscus.category }}"
+          data-category-id="{{ site.giscus.category_id }}"
+          data-mapping="{{ site.giscus.mapping }}"
+          data-strict="0"
+          data-reactions-enabled="{{ site.giscus.reactions_enabled }}"
+          data-emit-metadata="{{ site.giscus.emit_metadata }}"
+          data-input-position="{{ site.giscus.input_position }}"
+          data-theme="{{ site.giscus.theme }}"
+          data-lang="{{ site.giscus.lang | default: 'ja' }}"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>JavaScriptを有効にするとコメントが表示されます。</noscript>
 </section>
 {% endif %}
