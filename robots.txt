@@ -3,3 +3,6 @@ Allow: /
 
 User-agent: *
 Disallow: /private/
+
+User-agent: *
+Disallow: /notes/
