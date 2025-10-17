@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 
+title: はじめまして：このブログの使い方
 permalink: /about/
+nav_exclude: true   
 ---
-
