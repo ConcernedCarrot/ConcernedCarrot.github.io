@@ -28,4 +28,7 @@ plugins:
   emit_metadata: "0"
   input_position: "bottom"
   theme: "preferred_color_scheme"
-  lang: "en"                        
+  lang: "en"      
+
+header_pages:
+  - Index.md            
