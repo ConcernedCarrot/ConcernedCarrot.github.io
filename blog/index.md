@@ -4,7 +4,7 @@ title: Blog
 permalink: /blog/
 ---
 
-ゲームの感想や雑記を置く場所です。
+ゲームの感想や雑記を置く場所
 
 <ul>
   {% for post in site.posts %}
