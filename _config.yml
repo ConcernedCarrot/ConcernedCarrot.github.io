@@ -29,7 +29,7 @@ header_pages:
 
 markdown: kramdown
 
-twitter_username: "@ConcernedCarro"
+twitter_username: "ConcernedCarro"
 
 giscus:
   repo: "ConcernedCarrot/ConcernedCarrot.github.io"
