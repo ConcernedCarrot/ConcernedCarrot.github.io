@@ -1,6 +1,6 @@
 ---
 layout: home
-title: ホーム
+title: Home
 ---
 
-雑記ざっき
+zakki ざっき
