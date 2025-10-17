@@ -8,7 +8,7 @@ author:
   email:
   github_username:
 
-paginate_path: "/page:num/"
+url: "https://ConcernedCarrot.github.io"
 baseurl: ""
 
 theme: minima
