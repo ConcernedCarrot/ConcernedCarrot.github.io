@@ -4,6 +4,14 @@ title: Head
 permalink: /
 ---
 
+個人ブログです。主にゲームの雑記を書きます
+
+- **Blog**: ゲームの雑記の一覧  
+- **Note**: メモ 
+- **About**: このサイトと運営者について
+
+> ※記載内容は個人の感想です。
+
 <div class="two-col">
   <main class="main-col">
     <ul id="postList" class="post-list">
@@ -30,12 +38,3 @@ permalink: /
 
   {% include sidebar-taxonomy.html %}
 </div>
-
-
-個人ブログです。主にゲームの雑記を書きます
-
-- **Blog**: ゲームの雑記の一覧  
-- **Note**: メモ 
-- **About**: このサイトと運営者について
-
-> ※記載内容は個人の感想です。
