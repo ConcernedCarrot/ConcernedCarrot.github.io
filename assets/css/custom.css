@@ -1,6 +1,12 @@
-
 /* ちょっとだけ余白と読みやすさを改善 */
 .site-header { border-bottom: 1px solid #eaeaea; }
 .post-title { margin-top: 0.5rem; }
 .post-content p { line-height: 1.9; }
 code, pre { font-size: 0.95em; }
+
+/* アイコンと名前を横並びにする */
+.footer-col-wrapper .social-media-list li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
