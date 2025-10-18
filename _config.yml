@@ -1,10 +1,15 @@
 title: "Concerned;Carrot"
-description: "雑記ざっき"
+description: "心配する人参"
 lang: 
 timezone:
 
 author: ConcernedCarrot
-github_username: "ConcernedCarrot"
+
+social_links
+  - name: Github
+    url: https://github.com/ConcernedCarrot
+  - name: Twitter
+    url: https://x.com/ConcernedCarro
 
 url: "https://ConcernedCarrot.github.io"
 baseurl: ""
@@ -26,8 +31,6 @@ header_pages:
   - about.md     
 
 markdown: kramdown
-
-twitter_username: "ConcernedCarro"
 
 giscus:
   repo: "ConcernedCarrot/ConcernedCarrot.github.io"
