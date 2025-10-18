@@ -1,0 +1,65 @@
+---
+layout: page
+title: 分類（タグ）
+permalink: /tags/
+---
+
+<section class="tag-controls">
+  <p>タグをクリックすると該当タグの記事に絞り込みます</p>
+  <div id="tagChips" class="tag-chips">
+    {%- assign sorted_tags = site.tags | sort -%}
+    {%- for t in sorted_tags -%}
+      <button class="tag-chip" data-tag="{{ t[0] | downcase | escape }}">
+        {{ t[0] }} <span class="tag-count">{{ t[1].size }}</span>
+      </button>
+    {%- endfor -%}
+    <button class="tag-chip tag-all" data-tag="">すべて</button>
+  </div>
+</section>
+
+<ul id="tagPostList" class="tag-post-list">
+  {%- for post in site.posts -%}
+    <li class="tag-post"
+        data-tags="{{ post.tags | join: ',' | downcase | escape }}"
+        data-date="{{ post.date | date: '%Y-%m-%d' }}">
+      <a class="post-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <div class="meta">
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
+        {%- if post.tags -%}
+          <span class="tags">
+            {%- for tg in post.tags -%}
+              <span class="mini-chip">{{ tg }}</span>
+            {%- endfor -%}
+          </span>
+        {%- endif -%}
+      </div>
+    </li>
+  {%- endfor -%}
+</ul>
+
+<script>
+(function(){
+  const chips = document.getElementById('tagChips');
+  const list  = document.getElementById('tagPostList');
+  const items = Array.from(list.querySelectorAll('.tag-post'));
+
+  function render(tag) {
+    const q = (tag || '').trim().toLowerCase();
+    const filtered = items.filter(li => !q || (li.dataset.tags||'').split(',').includes(q));
+    filtered.sort((a,b) => b.dataset.date.localeCompare(a.dataset.date));
+    list.innerHTML = '';
+    filtered.forEach(li => list.appendChild(li));
+  }
+
+  chips.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tag-chip');
+    if (!btn) return;
+    chips.querySelectorAll('.tag-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render(btn.dataset.tag);
+  });
+
+  // 初期表示：すべて
+  render('');
+})();
+</script>
