@@ -37,6 +37,8 @@ header_pages:
   - blog/index.md
   - about.md  
   - browse/index.html
+  - tags/index.html
+  - archive/index.html
 
 exclude:
   - private
