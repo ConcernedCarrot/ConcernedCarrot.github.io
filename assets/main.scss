@@ -10,12 +10,14 @@
 .post-content p { line-height: 1.9; }
 code, pre { font-size: 0.95em; }
 
-/* フッターの調整 */
+/* フッターの調整（Slim） */
 .site-footer.slim-footer {
   padding: 12px 0;
   border-top: 1px solid #eaeaea;
   background: #fff;
 }
+
+/* フッター内の横並び */
 .site-footer .wrapper.footer-inner {
   display: flex;
   justify-content: space-between;
@@ -23,10 +25,14 @@ code, pre { font-size: 0.95em; }
   gap: 12px;
   flex-wrap: wrap;
 }
+
+/* コピーライトの見た目 */
 .site-footer .footer-left .copyright {
   font-size: 0.95rem;
   opacity: 0.85;
 }
+
+/* MinimaのSNSリスト */
 .site-footer .footer-right .social-media-list {
   display: flex;
   align-items: center;
@@ -40,15 +46,19 @@ code, pre { font-size: 0.95em; }
   align-items: center;
   gap: 6px;
 }
-.site-footer .social-media-list svg {
+/* アイコンサイズは1か所で統一 */
+.social-media-list svg {
   width: 18px;
   height: 18px;
 }
-.footer-inner {
-  display: flex;
-  justify-content: space-between;
+/* アイコン＋テキストを横並びに */
+.social-media-list a {
+  display: inline-flex;
   align-items: center;
+  gap: 6px;
 }
+
+/* 独自のSNSリストを使う（<ul class="footer-social">） */
 .footer-social {
   display: flex;
   gap: 12px;
@@ -56,29 +66,10 @@ code, pre { font-size: 0.95em; }
   margin: 0;
   padding: 0;
 }
-.footer-social a {
-  text-decoration: none;
+
+/* ホバー時の統一スタイル（Minima/独自リスト共通） */
+.footer-social a:hover,
+.social-media-list a:hover {
   opacity: 0.9;
-}
-.footer-social a:hover {
-  opacity: 1;
-}
-
-/* 任意：SNSのホバーの調整 */
-.site-footer .social-media-list a:hover {
-  opacity: 0.8;
   text-decoration: none;
-}
-
-/* アイコンと名前を同じ行にする */
-.social-media-list a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* アイコンサイズの微調整 */
-.social-media-list a svg {
-  width: 18px;
-  height: 18px;
 }
