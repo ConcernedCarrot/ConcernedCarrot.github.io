@@ -1,7 +1,5 @@
 title: "Concerned;Carrot"
 description: "心配する人参"
-lang: 
-timezone:
 
 author: ConcernedCarrot
 
@@ -14,7 +12,7 @@ social_links:
     url: https://vndb.org/u281841
   - name: EroSca
     url: https://erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki/user_infomation.php?user=ConcernedCarrot
-  - name: Backlogge
+  - name: Backloggd
     url: https://backloggd.com/u/ConcernedCarrot/games/
   - name: MyAnimeList
     url: https://myanimelist.net/profile/ConcernedCarrot
@@ -42,7 +40,7 @@ header_pages:
 
 markdown: kramdown
 
-google_site_verification: "<meta name="google-site-verification" content="tGcmRhNEoelwOxM8qZ9BtH3-iHh0ir6t07_khZlW4bQ" />"
+google_site_verification: "tGcmRhNEoelwOxM8qZ9BtH3-iHh0ir6t07_khZlW4bQ"
 
 giscus:
   repo: "ConcernedCarrot/ConcernedCarrot.github.io"
@@ -54,4 +52,3 @@ giscus:
   emit_metadata: "0"
   input_position: "bottom"
   theme: "preferred_color_scheme"
-  lang: 
