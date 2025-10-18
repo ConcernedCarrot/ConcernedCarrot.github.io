@@ -1,12 +1,7 @@
 User-agent: *
 Allow: /
 
-User-agent: *
-Allow: /
-Sitemap: https://ConcernedCarrot.github.io/sitemap.xml
-
-User-agent: *
 Disallow: /private/
-
-User-agent: *
 Disallow: /notes/
+
+Sitemap: https://concernedcarrot.github.io/sitemap.xml
