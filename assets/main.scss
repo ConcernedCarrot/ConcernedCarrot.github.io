@@ -44,6 +44,26 @@ code, pre { font-size: 0.95em; }
   width: 18px;
   height: 18px;
 }
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-social {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.footer-social a {
+  text-decoration: none;
+  opacity: 0.9;
+}
+.footer-social a:hover {
+  opacity: 1;
+}
+
 /* 任意：SNSのホバーの調整 */
 .site-footer .social-media-list a:hover {
   opacity: 0.8;
