@@ -3,10 +3,8 @@ description: "雑記ざっき"
 lang: 
 timezone:
 
-author:
-  name: "ConcernedCarrot"
-  email:
-  github_username: "ConcernedCarrot"
+author: ConcernedCarrot
+github_username: ConcernedCarrot
 
 url: "https://ConcernedCarrot.github.io"
 baseurl: ""
