@@ -3,7 +3,7 @@ Allow: /
 
 User-agent: *
 Allow: /
-Sitemap: https://ConcernedCarrot.github.io/ConcernedCarrot.github.io/sitemap.xml
+Sitemap: https://ConcernedCarrot.github.io/sitemap.xml
 
 User-agent: *
 Disallow: /private/
