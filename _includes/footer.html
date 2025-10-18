@@ -1,0 +1,17 @@
+
+{% comment %}
+Slim footer override for Minima.
+Place this file at: _includes/footer.html
+It replaces the theme's default footer with a clean, single-row layout.
+{% endcomment %}
+
+<footer class="site-footer slim-footer" role="contentinfo">
+  <div class="wrapper footer-inner">
+    <div class="footer-left">
+      <span class="copyright">© {{ site.author | default: site.title }} {{ site.time | date: "%Y" }}</span>
+    </div>
+    <div class="footer-right">
+      {% include social.html %}
+    </div>
+  </div>
+</footer>
