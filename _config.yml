@@ -29,6 +29,7 @@ paginate: 10
 
 plugins:
   - jekyll-paginate
+plugins:
   - jekyll-sitemap
 
 header_pages:
