@@ -38,6 +38,9 @@ header_pages:
   - blog/index.md
   - about.md     
 
+exclude:
+  - private
+
 markdown: kramdown
 
 google_site_verification: "tGcmRhNEoelwOxM8qZ9BtH3-iHh0ir6t07_khZlW4bQ"
