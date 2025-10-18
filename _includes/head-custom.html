@@ -16,3 +16,6 @@ Place at: _includes/head.html
 <link rel="canonical" href="{{ site.url }}{{ page.url | relative_url }}">
 {%- endif -%}
 
+{% if site.url %}
+<link rel="canonical" href="{{ site.url }}{{ page.url | relative_url }}">
+{% endif %}
