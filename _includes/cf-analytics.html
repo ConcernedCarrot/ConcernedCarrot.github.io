@@ -1,0 +1,15 @@
+<script>
+  (function () {
+    try {
+      var dnt = navigator.doNotTrack === "1" || window.doNotTrack === "1";
+      var isLocal = /^(localhost|127\.0\.0\.1)$/i.test(location.hostname);
+      if (dnt || isLocal) return;
+
+      var s = document.createElement('script');
+      s.defer = true;
+      s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      s.setAttribute('data-cf-beacon', JSON.stringify({ token: '653055e4db954df0b1d866133d61aa28' }));
+      document.body.appendChild(s);
+    } catch (e) {}
+  })();
+</script>
