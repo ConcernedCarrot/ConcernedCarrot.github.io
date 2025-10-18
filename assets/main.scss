@@ -4,11 +4,51 @@
 
 @import "minima";
 
-/* ちょっとだけ余白と読みやすさを改善 */
+/* 余白と読みやすさを改善 */
 .site-header { border-bottom: 1px solid #eaeaea; }
 .post-title { margin-top: 0.5rem; }
 .post-content p { line-height: 1.9; }
 code, pre { font-size: 0.95em; }
+
+/* フッターの調整 */
+.site-footer.slim-footer {
+  padding: 12px 0;
+  border-top: 1px solid #eaeaea;
+  background: #fff;
+}
+.site-footer .wrapper.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.site-footer .footer-left .copyright {
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+.site-footer .footer-right .social-media-list {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.site-footer .social-media-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.site-footer .social-media-list svg {
+  width: 18px;
+  height: 18px;
+}
+/* 任意：SNSのホバーの調整 */
+.site-footer .social-media-list a:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
 
 /* アイコンと名前を同じ行にする */
 .social-media-list a {
