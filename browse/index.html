@@ -1,0 +1,111 @@
+---
+layout: page
+title: Browse
+permalink: /browse/
+---
+
+<section class="browse-controls">
+  <div class="browse-row">
+    <label for="sortSelect">並べ替え:</label>
+    <select id="sortSelect" aria-label="並べ替え">
+      <option value="newest">新しい順</option>
+      <option value="oldest">古い順</option>
+      <option value="title">タイトル A→Z</option>
+    </select>
+
+    <label for="tagSelect">タグで絞り込み:</label>
+    <select id="tagSelect" aria-label="タグで絞り込み">
+      <option value="">すべて</option>
+      {%- assign all_tags = site.tags | sort -%}
+      {%- for tag in all_tags -%}
+        <option value="{{ tag[0] | escape }}">{{ tag[0] }}</option>
+      {%- endfor -%}
+    </select>
+
+    <label for="searchInput">検索:</label>
+    <input id="searchInput" type="search" placeholder="タイトルで検索" aria-label="検索" />
+  </div>
+</section>
+
+<ul id="postList" class="browse-list">
+  {%- for post in site.posts -%}
+    {%- assign tagline = post.tags | array_to_sentence_string -%}
+    {%- assign date_iso = post.date | date: "%Y-%m-%d" -%}
+    <li class="browse-item"
+        data-date="{{ date_iso }}"
+        data-title="{{ post.title | downcase | escape }}"
+        data-tags="{{ post.tags | join: ',' | downcase | escape }}">
+      <a class="browse-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <div class="browse-meta">
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.minima.date_format | default: "%Y-%m-%d" }}</time>
+        {%- if post.tags and post.tags.size > 0 -%}
+          <span class="browse-tags">
+            {%- for t in post.tags -%}
+              <span class="tag-chip" data-tag="{{ t | downcase | escape }}">{{ t }}</span>
+            {%- endfor -%}
+          </span>
+        {%- endif -%}
+      </div>
+      {%- if post.excerpt -%}
+        <div class="browse-excerpt">{{ post.excerpt | strip_html | truncate: 140 }}</div>
+      {%- endif -%}
+    </li>
+  {%- endfor -%}
+</ul>
+
+<script>
+(function() {
+  const list = document.getElementById('postList');
+  const items = Array.from(list.querySelectorAll('.browse-item'));
+  const sortSelect = document.getElementById('sortSelect');
+  const tagSelect = document.getElementById('tagSelect');
+  const searchInput = document.getElementById('searchInput');
+
+  function apply() {
+    const sortBy = sortSelect.value;
+    const tag = (tagSelect.value || '').trim().toLowerCase();
+    const q = (searchInput.value || '').trim().toLowerCase();
+
+    // 1) フィルタ
+    const filtered = items.filter(li => {
+      const liTags = (li.dataset.tags || '');
+      const liTitle = (li.dataset.title || '');
+      const textHit = !q || liTitle.includes(q) || (li.querySelector('.browse-excerpt')?.textContent.toLowerCase().includes(q));
+      const tagHit = !tag || (liTags.split(',').includes(tag));
+      return textHit && tagHit;
+    });
+
+    // 2) ソート
+    filtered.sort((a, b) => {
+      if (sortBy === 'title') {
+        return a.dataset.title.localeCompare(b.dataset.title, 'ja');
+      } else if (sortBy === 'oldest') {
+        return a.dataset.date.localeCompare(b.dataset.date);
+      } else {
+        // newest
+        return b.dataset.date.localeCompare(a.dataset.date);
+      }
+    });
+
+    // 3) 反映
+    list.innerHTML = '';
+    filtered.forEach(li => list.appendChild(li));
+  }
+
+  sortSelect.addEventListener('change', apply);
+  tagSelect.addEventListener('change', apply);
+  searchInput.addEventListener('input', apply);
+
+  // タグチップで絞り込み
+  list.addEventListener('click', (e) => {
+    const chip = e.target.closest('.tag-chip');
+    if (!chip) return;
+    const tag = chip.dataset.tag;
+    if (!tag) return;
+    tagSelect.value = chip.textContent;
+    apply();
+  });
+
+  apply();
+})();
+</script>
