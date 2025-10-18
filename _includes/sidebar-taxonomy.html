@@ -1,12 +1,9 @@
 <!-- _includes/sidebar-taxonomy.html -->
 <aside class="sidebar">
-  <!-- 月別 -->
   <section class="sb-block">
     <h3 class="sb-title">月別</h3>
     <ul id="sb-months" class="sb-list"></ul>
   </section>
-
-  <!-- タグ -->
   <section class="sb-block">
     <h3 class="sb-title">タグ</h3>
     <ul id="sb-tags" class="sb-list"></ul>
@@ -15,98 +12,71 @@
 
 <script>
 (function(){
-  // ====== 1) 投稿データの収集（ページ側の #postList から取得） ======
   const list = document.getElementById('postList');
   if (!list) return;
   const items = Array.from(list.querySelectorAll('.post-item'));
+  const ym = iso => (iso||'').slice(0,7);
 
-  // ユーティリティ
-  const ym = (iso) => (iso || '').slice(0,7); // YYYY-MM
-
-  // 集計：月別
-  const monthMap = new Map(); // ym -> {count, label}
+  const monthMap = new Map();
   items.forEach(li => {
-    const d = li.dataset.date; // YYYY-MM-DD
-    const key = ym(d);
+    const d = li.dataset.date; const key = ym(d);
     if (!key) return;
-    const label = (d || '').slice(0,4) + '年' + (d || '').slice(5,7) + '月';
-    const obj = monthMap.get(key) || { count: 0, label };
-    obj.count += 1;
-    monthMap.set(key, obj);
+    const label = d.slice(0,4) + '年' + d.slice(5,7) + '月';
+    const obj = monthMap.get(key) || {count:0, label};
+    obj.count++; monthMap.set(key, obj);
   });
 
-  // 集計：タグ
-  const tagMap = new Map(); // tag -> count
+  const tagMap = new Map();
   items.forEach(li => {
-    const tags = (li.dataset.tags || '').split(',').filter(Boolean);
-    tags.forEach(t => tagMap.set(t, (tagMap.get(t)||0) + 1));
+    (li.dataset.tags||'').split(',').filter(Boolean).forEach(t => {
+      tagMap.set(t, (tagMap.get(t)||0)+1);
+    });
   });
 
-  // ====== 2) 月リスト生成（新しい順） ======
-  const months = Array.from(monthMap.entries())
-    .sort((a,b) => b[0].localeCompare(a[0])); // key=YYYY-MM desc
+  const ulM = document.getElementById('sb-months');
+  Array.from(monthMap.entries())
+    .sort((a,b)=> b[0].localeCompare(a[0]))
+    .forEach(([k,info])=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<button class="sb-link" data-ym="${k}">${info.label} <span class="sb-count">${info.count}</span></button>`;
+      ulM.appendChild(li);
+    });
+  const liAllM=document.createElement('li');
+  liAllM.innerHTML=`<button class="sb-link sb-all" data-ym="">すべて</button>`;
+  ulM.appendChild(liAllM);
 
-  const ulMonths = document.getElementById('sb-months');
-  months.forEach(([key, info]) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<button class="sb-link" data-ym="${key}">${info.label} <span class="sb-count">${info.count}</span></button>`;
-    ulMonths.appendChild(li);
-  });
-  // 「すべて」
-  const liAllM = document.createElement('li');
-  liAllM.innerHTML = `<button class="sb-link sb-all" data-ym="">すべて</button>`;
-  ulMonths.appendChild(liAllM);
+  const ulT = document.getElementById('sb-tags');
+  Array.from(tagMap.entries())
+    .sort((a,b)=> b[1]-a[1] || a[0].localeCompare(b[0],'ja'))
+    .forEach(([name,count])=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<button class="sb-link" data-tag="${name}">${name} <span class="sb-count">${count}</span></button>`;
+      ulT.appendChild(li);
+    });
+  const liAllT=document.createElement('li');
+  liAllT.innerHTML=`<button class="sb-link sb-all" data-tag="">すべて</button>`;
+  ulT.appendChild(liAllT);
 
-  // ====== 3) タグリスト生成（件数が多い順→同数は名前順） ======
-  const tags = Array.from(tagMap.entries())
-    .sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ja'));
-
-  const ulTags = document.getElementById('sb-tags');
-  tags.forEach(([name, count]) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<button class="sb-link" data-tag="${name}">${name} <span class="sb-count">${count}</span></button>`;
-    ulTags.appendChild(li);
-  });
-  const liAllT = document.createElement('li');
-  liAllT.innerHTML = `<button class="sb-link sb-all" data-tag="">すべて</button>`;
-  ulTags.appendChild(liAllT);
-
-  // ====== 4) フィルタ挙動（同ページの #postList を絞り込み） ======
-  function render({ymKey = '', tag = ''} = {}) {
-    const ymk = (ymKey || '').trim();
-    const tg  = (tag   || '').trim().toLowerCase();
-
-    const filtered = items.filter(li => {
-      const okYM  = !ymk || (li.dataset.date || '').startsWith(ymk);
-      const okTag = !tg  || (li.dataset.tags || '').split(',').includes(tg);
+  let stateYM='', stateTag='';
+  function render(){
+    const filtered = items.filter(li=>{
+      const okYM = !stateYM || (li.dataset.date||'').startsWith(stateYM);
+      const okTag = !stateTag || (li.dataset.tags||'').split(',').includes(stateTag);
       return okYM && okTag;
-    }).sort((a,b) => b.dataset.date.localeCompare(a.dataset.date));
-
-    list.innerHTML = '';
-    filtered.forEach(li => list.appendChild(li));
+    }).sort((a,b)=> b.dataset.date.localeCompare(a.dataset.date));
+    list.innerHTML=''; filtered.forEach(li=>list.appendChild(li));
   }
-
-  // クリックで反映
-  let stateYM = '', stateTag = '';
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.sb-link');
-    if (!btn) return;
-
-    if (btn.dataset.ym !== undefined) {
-      stateYM = btn.dataset.ym || '';
-      // 選択状態の見た目
-      ulMonths.querySelectorAll('.sb-link').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  document.addEventListener('click', e=>{
+    const b=e.target.closest('.sb-link'); if(!b) return;
+    if (b.dataset.ym !== undefined){
+      stateYM=b.dataset.ym||''; ulM.querySelectorAll('.sb-link').forEach(x=>x.classList.remove('active')); b.classList.add('active');
     }
-    if (btn.dataset.tag !== undefined) {
-      stateTag = (btn.dataset.tag || '').toLowerCase();
-      ulTags.querySelectorAll('.sb-link').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    if (b.dataset.tag !== undefined){
+      stateTag=(b.dataset.tag||''); ulT.querySelectorAll('.sb-link').forEach(x=>x.classList.remove('active')); b.classList.add('active');
     }
-    render({ymKey: stateYM, tag: stateTag});
+    render();
   });
-
-  // 初期表示（全件、新しい順）
-  render({});
+  render();
 })();
 </script>
+
