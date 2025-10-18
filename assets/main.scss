@@ -1,0 +1,18 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@import "minima";
+
+/* アイコンと名前を同じ行にする */
+.social-media-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* アイコンサイズの微調整 */
+.social-media-list a svg {
+  width: 18px;
+  height: 18px;
+}
