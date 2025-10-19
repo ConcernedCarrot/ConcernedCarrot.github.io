@@ -35,9 +35,9 @@ plugins:
 header_pages:
   - index.md
   - blog/index.md
-  - about.md  
   - tags/index.html
   - archive/index.html
+  - about.md  
 
 exclude:
   - private
