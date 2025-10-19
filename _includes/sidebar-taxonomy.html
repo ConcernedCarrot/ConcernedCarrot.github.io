@@ -18,18 +18,12 @@
 
   <ul id="sb-months" class="sb-list">
     {%- for ym in ym_sorted -%}
-      {%- assign count = 0 -%}
-      {%- for p in site.posts -%}
-        {%- assign year_num = p.date | date: "%Y" | plus: 0 -%}
-        {%- if year_num >= 1900 and p.date | date: "%Y-%m" == ym -%}
-          {%- assign count = count | plus: 1 -%}
-        {%- endif -%}
-      {%- endfor -%}
       {%- assign y = ym | slice: 0, 4 -%}
       {%- assign m = ym | slice: 5, 2 -%}
       <li>
         <button class="sb-link" data-ym="{{ ym }}">
-          {{ y }}年{{ m }}月 <span class="sb-count">{{ count }}</span>
+          {{ y }}年{{ m }}月
+          <span class="sb-count" data-ym="{{ ym }}">0</span>
         </button>
       </li>
     {%- endfor -%}
@@ -38,7 +32,8 @@
 </section>
 
 
-  <!-- タグ（件数降順→名前昇順の安定ソート） -->
+
+  <!-- タグ（件数降順→名前昇順） -->
   <section class="sb-block">
     <h3 class="sb-title">タグ</h3>
 
