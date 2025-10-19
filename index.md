@@ -26,11 +26,7 @@ permalink: /
           <div class="meta">
             <span class="pin-badge">PINNED</span>
             <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
-            {%- if post.tags -%}
-              <span class="tags">
-                {%- for t in post.tags -%}<span class="tag-chip">{{ t }}</span>{%- endfor -%}
-              </span>
-            {%- endif -%}
+            {%- if post.tags -%}<span class="tags">{%- for t in post.tags -%}<span class="tag-chip">{{ t }}</span>{%- endfor -%}</span>{%- endif -%}
           </div>
           {%- if post.excerpt -%}<p class="excerpt">{{ post.excerpt | strip_html | truncate: 140 }}</p>{%- endif -%}
         </li>
@@ -43,11 +39,7 @@ permalink: /
           <a class="post-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
           <div class="meta">
             <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
-            {%- if post.tags -%}
-              <span class="tags">
-                {%- for t in post.tags -%}<span class="tag-chip">{{ t }}</span>{%- endfor -%}
-              </span>
-            {%- endif -%}
+            {%- if post.tags -%}<span class="tags">{%- for t in post.tags -%}<span class="tag-chip">{{ t }}</span>{%- endfor -%}</span>{%- endif -%}
           </div>
           {%- if post.excerpt -%}<p class="excerpt">{{ post.excerpt | strip_html | truncate: 140 }}</p>{%- endif -%}
         </li>
