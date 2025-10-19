@@ -1,38 +1,42 @@
 <!-- _includes/sidebar-taxonomy.html -->
 <aside class="sidebar">
-  <!-- 月別（新しい順） -->
-  <section class="sb-block">
-    <h3 class="sb-title">月別</h3>
-    {%- assign ym_list = "" | split: "" -%}
-    {%- for p in site.posts -%}
-      {%- assign y = p.date | date: "%Y" -%}
-      {%- assign m = p.date | date: "%m" -%}
-      {%- assign ym = y | append: "-" | append: m -%}
+<!-- 月別 -->
+<section class="sb-block">
+  <h3 class="sb-title">月別</h3>
+
+  {%- assign ym_list = "" | split: "" -%}
+  {%- for p in site.posts -%}
+    {%- assign year_num = p.date | date: "%Y" | plus: 0 -%}
+    {%- if year_num >= 1000 -%}
+      {%- assign ym = p.date | date: "%Y-%m" -%}
       {%- unless ym_list contains ym -%}
         {%- assign ym_list = ym_list | push: ym -%}
       {%- endunless -%}
-    {%- endfor -%}
-    {%- assign ym_sorted = ym_list | sort | reverse -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign ym_sorted = ym_list | sort | reverse -%}
 
-    <ul id="sb-months" class="sb-list">
-      {%- for ym in ym_sorted -%}
-        {%- assign y = ym | slice: 0, 4 -%}
-        {%- assign m = ym | slice: 5, 2 -%}
-        {%- assign count = 0 -%}
-        {%- for p in site.posts -%}
-          {%- if p.date | date: "%Y-%m" == ym -%}
-            {%- assign count = count | plus: 1 -%}
-          {%- endif -%}
-        {%- endfor -%}
-        <li>
-          <button class="sb-link" data-ym="{{ ym }}">
-            {{ y }}年{{ m }}月 <span class="sb-count">{{ count }}</span>
-          </button>
-        </li>
+  <ul id="sb-months" class="sb-list">
+    {%- for ym in ym_sorted -%}
+      {%- assign count = 0 -%}
+      {%- for p in site.posts -%}
+        {%- assign year_num = p.date | date: "%Y" | plus: 0 -%}
+        {%- if year_num >= 1900 and p.date | date: "%Y-%m" == ym -%}
+          {%- assign count = count | plus: 1 -%}
+        {%- endif -%}
       {%- endfor -%}
-      <li><button class="sb-link sb-all" data-ym="">すべて</button></li>
-    </ul>
-  </section>
+      {%- assign y = ym | slice: 0, 4 -%}
+      {%- assign m = ym | slice: 5, 2 -%}
+      <li>
+        <button class="sb-link" data-ym="{{ ym }}">
+          {{ y }}年{{ m }}月 <span class="sb-count">{{ count }}</span>
+        </button>
+      </li>
+    {%- endfor -%}
+    <li><button class="sb-link sb-all" data-ym="">すべて</button></li>
+  </ul>
+</section>
+
 
   <!-- タグ（件数降順→名前昇順の安定ソート） -->
   <section class="sb-block">
