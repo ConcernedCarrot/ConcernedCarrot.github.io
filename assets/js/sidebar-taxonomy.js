@@ -1,21 +1,17 @@
 // assets/js/sidebar-taxonomy.js
 document.addEventListener('DOMContentLoaded', function () {
-  // 投稿一覧（必須）
   var list = document.getElementById('postList');
   if (!list) return;
 
-  // サイドバー
   var monthsBox = document.getElementById('sb-months');
   var tagsBox   = document.getElementById('sb-tags');
 
-  // 既存のLIを取得
   var all = Array.prototype.slice.call(list.querySelectorAll('.post-item'));
   if (!all.length) return;
 
   var pinnedEls = all.filter(function (li) { return li.classList.contains('pinned'); });
   var otherEls  = all.filter(function (li) { return !li.classList.contains('pinned'); });
 
-  // 並べ替え & フィルタ
   function sortDesc(arr) {
     return arr.slice().sort(function (a, b) {
       return (b.dataset.date || '').localeCompare(a.dataset.date || '');
@@ -25,7 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var ymk = (ymKey || '').trim();
     var tg  = (tag   || '').trim().toLowerCase();
     return arr.filter(function (li) {
-      var okYM  = !ymk || (li.dataset.date || '').slice(0, 7) === ymk;
+      var d = (li.dataset.date || '');
+      // 年が 1000 未満のものは除外（不正日付対策）
+      var year = parseInt(d.slice(0,4), 10);
+      if (!isFinite(year) || year < 1000) return false;
+
+      var okYM  = !ymk || d.slice(0, 7) === ymk;
       var okTag = !tg  || (li.dataset.tags || '').split(',').includes(tg);
       return okYM && okTag;
     });
@@ -36,12 +37,56 @@ document.addEventListener('DOMContentLoaded', function () {
     var ordered = sortDesc(pf).concat(sortDesc(of)); // 常に「ピン → その他」
     list.innerHTML = '';
     ordered.forEach(function (li) { list.appendChild(li); });
+    recalcSidebarCounts(); // 並べ替え後にカウントも同期
   }
 
-  // 状態とイベント
+  // ---- DOMから月/タグの件数を再計算して上書き ----
+  function recalcSidebarCounts() {
+    // 月別
+    if (monthsBox) {
+      // YM -> 件数
+      var counts = {};
+      all.forEach(function (li) {
+        var d = (li.dataset.date || '');
+        var y = parseInt(d.slice(0,4), 10);
+        if (!isFinite(y) || y < 1000) return; // 不正日付を除外
+        var ym = d.slice(0,7);
+        counts[ym] = (counts[ym] || 0) + 1;
+      });
+
+      monthsBox.querySelectorAll('.sb-count').forEach(function (span) {
+        var ym = span.getAttribute('data-ym');
+        var c = counts[ym] || 0;
+        span.textContent = c;
+        // 0件の月はボタンごと非表示
+        var btn = span.closest('li');
+        if (btn) btn.style.display = (c === 0 ? 'none' : '');
+      });
+    }
+
+    // タグ
+    if (tagsBox) {
+      // tag -> 件数
+      var tcount = {};
+      all.forEach(function (li) {
+        var d = (li.dataset.date || '');
+        var y = parseInt(d.slice(0,4), 10);
+        if (!isFinite(y) || y < 1000) return; // 不正日付対策
+        (li.dataset.tags || '').split(',').filter(Boolean).forEach(function (t) {
+          tcount[t] = (tcount[t] || 0) + 1;
+        });
+      });
+      tagsBox.querySelectorAll('[data-tag]').forEach(function (btn) {
+        var name = (btn.getAttribute('data-tag') || '').toLowerCase();
+        var chip = btn.querySelector('.sb-count');
+        if (chip) chip.textContent = tcount[name] || 0;
+      });
+    }
+  }
+  // ------------------------------------------------------------
+
   var state = { ymKey: '', tag: '' };
 
-  // 月別クリック
   if (monthsBox) {
     monthsBox.addEventListener('click', function (e) {
       var btn = e.target.closest('.sb-link');
@@ -52,8 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
       render(state);
     });
   }
-
-  // タグクリック
   if (tagsBox) {
     tagsBox.addEventListener('click', function (e) {
       var btn = e.target.closest('.sb-link');
@@ -65,7 +108,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 初期描画（ピン→その他の新着順）
+  // 初期描画：DOMに合わせて件数をセットしておく
+  recalcSidebarCounts();
   render(state);
 });
+
 
