@@ -24,66 +24,64 @@
             {%- assign count = count | plus: 1 -%}
           {%- endif -%}
         {%- endfor -%}
-        <li><button class="sb-link" data-ym="{{ ym }}">{{ y }}年{{ m }}月 <span class="sb-count">{{ count }}</span></button></li>
+        <li>
+          <button class="sb-link" data-ym="{{ ym }}">
+            {{ y }}年{{ m }}月 <span class="sb-count">{{ count }}</span>
+          </button>
+        </li>
       {%- endfor -%}
       <li><button class="sb-link sb-all" data-ym="">すべて</button></li>
     </ul>
   </section>
 
- <!-- タグ（件数降順→名前昇順の安定ソート） -->
-<section class="sb-block">
-  <h3 class="sb-title">タグ</h3>
+  <!-- タグ（件数降順→名前昇順の安定ソート） -->
+  <section class="sb-block">
+    <h3 class="sb-title">タグ</h3>
 
-  {%- assign tag_pairs = site.tags -%}
-  {%- assign buf = "" | split: "" -%}
-  {%- for t in tag_pairs -%}
-    {%- assign name = t[0] -%}
-    {%- assign posts = t[1] -%}
-    {%- assign count = posts | size -%}
-    {%- comment -%}
-      文字列 "count|||name" を作り、あとで sort → reverse する
-      同数のときは名前の降順になるので、事前にnameを逆順補正用に別配列…でもOKだが、
-      ここでは「件数降順・同数なら名前昇順」にするため、いったん name をゼロパディング count に付ける
-      シンプルに二段階で実現：まず count で降順、同数名の並びは最後に手直し
-    {%- endcomment -%}
-    {%- assign entry = count | append: "|||" | append: name -%}
-    {%- assign buf = buf | push: entry -%}
-  {%- endfor -%}
-
-  {%- assign sorted_by_count = buf | sort | reverse -%}
-
-  {%- comment -%}
-    同数時は name 昇順にしたいので、同カウントのブロックごとに再ソート
-  {%- endcomment -%}
-  {%- assign finalized = "" | split: "" -%}
-  {%- assign current_block = "" | split: "" -%}
-  {%- assign prev_count = "" -%}
-  {%- for item in sorted_by_count -%}
-    {%- assign parts = item | split: "|||" -%}
-    {%- assign cnt   = parts[0] -%}
-    {%- assign nm    = parts[1] -%}
-    {%- if prev_count != "" and cnt != prev_count -%}
-      {%- assign current_block = current_block | sort -%} {# 名前昇順 #}
-      {%- assign finalized = finalized | concat: current_block -%}
-      {%- assign current_block = "" | split: "" -%}
-    {%- endif -%}
-    {%- assign current_block = current_block | push: nm | uniq -%}
-    {%- assign prev_count = cnt -%}
-  {%- endfor -%}
-  {%- if current_block.size > 0 -%}
-    {%- assign current_block = current_block | sort -%}
-    {%- assign finalized = finalized | concat: current_block -%}
-  {%- endif -%}
-
-  <ul id="sb-tags" class="sb-list">
-    {%- for name in finalized -%}
-      {%- assign count = site.tags[name] | size -%}
-      <li>
-        <button class="sb-link" data-tag="{{ name | downcase | escape }}">
-          {{ name }} <span class="sb-count">{{ count }}</span>
-        </button>
-      </li>
+    {%- assign tag_pairs = site.tags -%}
+    {%- assign buf = "" | split: "" -%}
+    {%- for t in tag_pairs -%}
+      {%- assign name = t[0] -%}
+      {%- assign posts = t[1] -%}
+      {%- assign count = posts | size -%}
+      {%- assign entry = count | append: "|||" | append: name -%}
+      {%- assign buf = buf | push: entry -%}
     {%- endfor -%}
-    <li><button class="sb-link sb-all" data-tag="">すべて</button></li>
-  </ul>
-</section>
+
+    {%- assign sorted_by_count = buf | sort | reverse -%}
+
+    {%- comment -%} 同数時は name 昇順に揃える {%- endcomment -%}
+    {%- assign finalized = "" | split: "" -%}
+    {%- assign current_block = "" | split: "" -%}
+    {%- assign prev_count = "" -%}
+    {%- for item in sorted_by_count -%}
+      {%- assign parts = item | split: "|||" -%}
+      {%- assign cnt   = parts[0] -%}
+      {%- assign nm    = parts[1] -%}
+      {%- if prev_count != "" and cnt != prev_count -%}
+        {%- assign current_block = current_block | sort -%}
+        {%- assign finalized = finalized | concat: current_block -%}
+        {%- assign current_block = "" | split: "" -%}
+      {%- endif -%}
+      {%- assign current_block = current_block | push: nm | uniq -%}
+      {%- assign prev_count = cnt -%}
+    {%- endfor -%}
+    {%- if current_block.size > 0 -%}
+      {%- assign current_block = current_block | sort -%}
+      {%- assign finalized = finalized | concat: current_block -%}
+    {%- endif -%}
+
+    <ul id="sb-tags" class="sb-list">
+      {%- for name in finalized -%}
+        {%- assign count = site.tags[name] | size -%}
+        <li>
+          <button class="sb-link" data-tag="{{ name | downcase | escape }}">
+            {{ name }} <span class="sb-count">{{ count }}</span>
+          </button>
+        </li>
+      {%- endfor -%}
+      <li><button class="sb-link sb-all" data-tag="">すべて</button></li>
+    </ul>
+  </section>
+</aside>
+
