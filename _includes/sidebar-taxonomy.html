@@ -4,6 +4,7 @@
     <h3 class="sb-title">月別</h3>
     <ul id="sb-months" class="sb-list"></ul>
   </section>
+
   <section class="sb-block">
     <h3 class="sb-title">タグ</h3>
     <ul id="sb-tags" class="sb-list"></ul>
@@ -14,68 +15,86 @@
 (function(){
   const list = document.getElementById('postList');
   if (!list) return;
-  const items = Array.from(list.querySelectorAll('.post-item'));
-  const ym = iso => (iso||'').slice(0,7);
 
+  // 既存のLIを取得（ピン留めとその他を分離）
+  const all = Array.from(list.querySelectorAll('.post-item'));
+  const pinnedEls = all.filter(li => li.classList.contains('pinned'));
+  const otherEls  = all.filter(li => !li.classList.contains('pinned'));
+
+  // 集計（月）
   const monthMap = new Map();
-  items.forEach(li => {
-    const d = li.dataset.date; const key = ym(d);
-    if (!key) return;
+  all.forEach(li => {
+    const d = li.dataset.date || '';
+    const ym = d.slice(0,7); // YYYY-MM
+    if (!ym) return;
     const label = d.slice(0,4) + '年' + d.slice(5,7) + '月';
-    const obj = monthMap.get(key) || {count:0, label};
-    obj.count++; monthMap.set(key, obj);
+    const o = monthMap.get(ym) || {count:0,label};
+    o.count++; monthMap.set(ym, o);
   });
+  const months = Array.from(monthMap.entries()).sort((a,b)=> b[0].localeCompare(a[0]));
 
+  // 集計（タグ：件数降順→名前昇順）
   const tagMap = new Map();
-  items.forEach(li => {
-    (li.dataset.tags||'').split(',').filter(Boolean).forEach(t => {
+  all.forEach(li => {
+    (li.dataset.tags || '').split(',').filter(Boolean).forEach(t=>{
       tagMap.set(t, (tagMap.get(t)||0)+1);
     });
   });
+  const tags = Array.from(tagMap.entries()).sort((a,b)=> b[1]-a[1] || a[0].localeCompare(b[0], 'ja'));
 
-  const ulM = document.getElementById('sb-months');
-  Array.from(monthMap.entries())
-    .sort((a,b)=> b[0].localeCompare(a[0]))
-    .forEach(([k,info])=>{
-      const li=document.createElement('li');
-      li.innerHTML=`<button class="sb-link" data-ym="${k}">${info.label} <span class="sb-count">${info.count}</span></button>`;
-      ulM.appendChild(li);
-    });
-  const liAllM=document.createElement('li');
-  liAllM.innerHTML=`<button class="sb-link sb-all" data-ym="">すべて</button>`;
-  ulM.appendChild(liAllM);
-
-  const ulT = document.getElementById('sb-tags');
-  Array.from(tagMap.entries())
-    .sort((a,b)=> b[1]-a[1] || a[0].localeCompare(b[0],'ja'))
-    .forEach(([name,count])=>{
-      const li=document.createElement('li');
-      li.innerHTML=`<button class="sb-link" data-tag="${name}">${name} <span class="sb-count">${count}</span></button>`;
-      ulT.appendChild(li);
-    });
-  const liAllT=document.createElement('li');
-  liAllT.innerHTML=`<button class="sb-link sb-all" data-tag="">すべて</button>`;
-  ulT.appendChild(liAllT);
-
-  let stateYM='', stateTag='';
-  function render(){
-    const filtered = items.filter(li=>{
-      const okYM = !stateYM || (li.dataset.date||'').startsWith(stateYM);
-      const okTag = !stateTag || (li.dataset.tags||'').split(',').includes(stateTag);
-      return okYM && okTag;
-    }).sort((a,b)=> b.dataset.date.localeCompare(a.dataset.date));
-    list.innerHTML=''; filtered.forEach(li=>list.appendChild(li));
-  }
-  document.addEventListener('click', e=>{
-    const b=e.target.closest('.sb-link'); if(!b) return;
-    if (b.dataset.ym !== undefined){
-      stateYM=b.dataset.ym||''; ulM.querySelectorAll('.sb-link').forEach(x=>x.classList.remove('active')); b.classList.add('active');
-    }
-    if (b.dataset.tag !== undefined){
-      stateTag=(b.dataset.tag||''); ulT.querySelectorAll('.sb-link').forEach(x=>x.classList.remove('active')); b.classList.add('active');
-    }
-    render();
+  // DOMへ描画
+  const ulMonths = document.getElementById('sb-months');
+  months.forEach(([key, info])=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="sb-link" data-ym="${key}">${info.label} <span class="sb-count">${info.count}</span></button>`;
+    ulMonths.appendChild(li);
   });
+  const liAllM = document.createElement('li');
+  liAllM.innerHTML = `<button class="sb-link sb-all" data-ym="">すべて</button>`;
+  ulMonths.appendChild(liAllM);
+
+  const ulTags = document.getElementById('sb-tags');
+  tags.forEach(([name,count])=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="sb-link" data-tag="${name}">${name} <span class="sb-count">${count}</span></button>`;
+    ulTags.appendChild(li);
+  });
+  const liAllT = document.createElement('li');
+  liAllT.innerHTML = `<button class="sb-link sb-all" data-tag="">すべて</button>`;
+  ulTags.appendChild(liAllT);
+
+  // 並べ替え・絞り込み（ピン→その他 を常に維持）
+  function sortDesc(arr){ return arr.slice().sort((a,b)=> b.dataset.date.localeCompare(a.dataset.date)); }
+  function filter(arr, ymKey, tag){
+    const ymk = (ymKey||'').trim();
+    const tg  = (tag  ||'').trim().toLowerCase();
+    return arr.filter(li=>{
+      const okYM  = !ymk || (li.dataset.date||'').startsWith(ymk);
+      const okTag = !tg  || (li.dataset.tags||'').split(',').includes(tg);
+      return okYM && okTag;
+    });
+  }
+  function render(state){
+    const pf = filter(pinnedEls, state.ymKey, state.tag);
+    const of = filter(otherEls,  state.ymKey, state.tag);
+    const ordered = sortDesc(pf).concat(sortDesc(of)); // ← ここで必ずピンを先に
+    list.innerHTML = '';
+    ordered.forEach(li => list.appendChild(li));
+  }
+
+  let state = { ymKey:'', tag:'' };
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.sb-link'); if (!btn) return;
+    if ('ym'  in btn.dataset) { state.ymKey = btn.dataset.ym || ''; ulMonths.querySelectorAll('.sb-link').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+    if ('tag' in btn.dataset) { state.tag   = (btn.dataset.tag||'').toLowerCase(); ulTags.querySelectorAll('.sb-link').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+    render(state);
+  });
+
+  // 初期表示：ピン→その他（新着順）
+  render(state);
+})();
+</script>
+
   render();
 })();
 </script>
