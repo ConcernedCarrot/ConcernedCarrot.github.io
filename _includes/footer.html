@@ -1,22 +1,30 @@
-
 {% comment %}
-Minimaのスリムなフッター
-フッターを一行のレイアウトに変更
+- Minimaのスリムなフッター（1行レイアウト）
+- social_links 未設定時の空UL防止
+- 著者名のフォールバック
+- 外部リンクのセキュリティ属性強化
 {% endcomment %}
 
 <footer class="site-footer slim-footer" role="contentinfo">
   <div class="wrapper footer-inner">
     <div class="footer-left">
-      <span>© {{ site.author }} {{ site.time | date: "%Y" }}</span>
+      <span>© {{ site.author | default: site.title }} {{ site.time | date: "%Y" }}</span>
     </div>
     <div class="footer-right">
+      {% if site.social_links and site.social_links.size > 0 %}
       <ul class="footer-social">
         {% for item in site.social_links %}
-          <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.name }}</a></li>
+          <li>
+            <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ item.name }}">
+              {{ item.name }}
+            </a>
+          </li>
         {% endfor %}
       </ul>
+      {% endif %}
     </div>
   </div>
 </footer>
 
 {% include cf-analytics.html %}
+<script src="{{ '/assets/js/sidebar-taxonomy.js' | relative_url }}"></script>
