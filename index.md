@@ -4,13 +4,6 @@ title: Head
 permalink: /
 ---
 
-<style>
-.two-col{display:grid;grid-template-columns:1fr;gap:18px}
-@media(min-width:900px){.two-col{grid-template-columns:minmax(0,1fr) 280px}}
-.sidebar{border:1px solid #eaeaea;border-radius:10px;padding:12px}
-</style>
-
-
 個人ブログです。主にゲームの雑記を書きます
 
 - **Blog**: ゲームの雑記の一覧  
