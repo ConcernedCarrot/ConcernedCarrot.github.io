@@ -1,11 +1,18 @@
-
-/* Two-column layout without touching Minima's head.html */
-.two-col { display: grid; grid-template-columns: 1fr; gap: 18px; }
-@media (min-width: 900px) {
-  .two-col { grid-template-columns: minmax(0,1fr) 280px; align-items: start; }
+/* 2カラム（モバイルで縦に） */
+.page-content .two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
 }
-.main-col { min-width: 0; }
+@media (min-width: 900px) {
+  .page-content .two-col {
+    grid-template-columns: minmax(0,1fr) 280px; /* 本文 / サイドバー */
+    align-items: start;
+  }
+}
+.page-content .main-col { min-width: 0; }
 
+/* 投稿リスト */
 .post-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
 .post-item { border: 1px solid #eaeaea; border-radius: 10px; padding: 12px 14px; }
 .post-title { font-weight: 600; text-decoration: none; }
@@ -13,7 +20,7 @@
 .meta { font-size: .9rem; opacity: .85; display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
 .tag-chip { border: 1px solid #ddd; border-radius: 999px; padding: 2px 8px; font-size: .8rem; }
 
-/* Sidebar */
+/* サイドバー */
 .sidebar { border: 1px solid #eaeaea; border-radius: 10px; padding: 12px; position: sticky; top: 12px; }
 .sb-block + .sb-block { margin-top: 16px; }
 .sb-title { font-size: 1rem; margin: 0 0 6px; }
@@ -23,7 +30,6 @@
 .sb-link.active { background: #f0f0f0; }
 .sb-count { font-size: .8rem; opacity: .7; margin-left: 6px; }
 
-/* Footer nicety (optional) */
+/* フッターのGitHubアイコン横並び */
 .footer-col-wrapper .social-media-list li { display:flex; align-items:center; gap:6px; }
 .footer-col-wrapper .social-media-list svg { width:18px; height:18px; }
-
